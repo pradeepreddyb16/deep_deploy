@@ -35,7 +35,7 @@ class Models:
         return data
     
 
-    # ADMIN LOGIN ATTEMPTS WITH UNAME
+# ADMIN LOGIN ATTEMPTS WITH UNAME
     def getLoginAttemptsWithUname(uname):
         cur=mysql.connection.cursor()
         
@@ -1266,7 +1266,7 @@ class Models:
         return data
         
 
-#ADDING TO SUB COMMAND CENTER TEAM
+# ADDING TO SUB COMMAND CENTER TEAM
     def addemployee(name,age,occupation):
         cur = mysql.connection.cursor()
 
@@ -1277,80 +1277,34 @@ class Models:
         cur.close()
 
 
-############### THIRUMALA ###############
+############## SHOW DOCTOR NURSE AND COMPOUNDER ################
 
 
-#ADDING TO SUB COMMAND CENTER TEAM
-    def thiruselect():
-        cur = mysql.connection.cursor()
-
-        sql = "SELECT `id`, `name`, `email`, `password`  FROM `employee` WHERE 1"
-        cur.execute(sql)
+# DOCTOR
+    def selectalldoctors(clientid):
+        cur=mysql.connection.cursor()
+        sql = "SELECT  `doctor` FROM `client` WHERE `client_id` = %s"
+        cur.execute(sql,[clientid])
         data = cur.fetchall()
+        cur.close()
         return data
     
 
-#ADDING TO SUB COMMAND CENTER TEAM
-    def thirusingleselect(id):
-        cur= mysql.connection.cursor()
-        
-        sql = "SELECT `id`, `name`, `email`, `password` FROM `employee` WHERE `id`= %s"
-    
-        cur.execute(sql,[id])
+# NURSE 
+    def selectallnurse(clientid):
+        cur=mysql.connection.cursor()
+        sql = "SELECT `nurse` FROM `client` WHERE `client_id` = %s"
+        cur.execute(sql,[clientid])
         data = cur.fetchall()
+        cur.close()
         return data
     
 
-#ADDING TO SUB COMMAND CENTER TEAM
-    def validation(email):
-        cur= mysql.connection.cursor()
-        
-        sql = "SELECT `id`, `name`, `email`, `password` FROM `employee` WHERE 1"
-    
-        cur.execute(sql,[email])
+# COMPOUNDER
+    def selectallcompounders(clientid):
+        cur=mysql.connection.cursor()
+        sql = "SELECT `compounder` FROM `client` WHERE `client_id` = %s"
+        cur.execute(sql,[clientid])
         data = cur.fetchall()
-        return data
-    
-    
-
-#ADDING TO SUB COMMAND CENTER TEAM
-    def demoinsert(name,email,password,con_password):
-        cur = mysql.connection.cursor()
-
-        sql = "INSERT INTO `employee`(`name`, `email`,  `password`, `con_password`) VALUES (%s, %s, %s, %s)"
-
-        cur.execute(sql,[name,email,password,con_password])
-        mysql.connection.commit()
         cur.close()
-
-
-# DEACTIVATE SUB CCT
-    def thiruupdate(name,email,id):
-        cur = mysql.connection.cursor()
-        
-        sql = "UPDATE `employee` SET `name`= %s,`email`=%s WHERE `id` = %s"
-        
-        cur.execute(sql,[name,email,id])
-        mysql.connection.commit()
-        cur.close()
-
-
-# DEACTIVATE SUB CCT
-    def thirudelete(id):
-        cur = mysql.connection.cursor()
-        sql = "DELETE FROM `employee` WHERE `id` = %s"
-            
-        cur.execute(sql,[id])
-        mysql.connection.commit()
-        cur.close()
-
-
-#ADDING TO SUB COMMAND CENTER TEAM
-    def loginselect(email,password):
-        cur= mysql.connection.cursor()
-        
-        sql = "SELECT `id`, `name`, `email`, `password` FROM `employee` WHERE `email` = %s and `password`=%s"
-    
-        cur.execute(sql,[email,password])
-        data = cur.fetchone()
         return data

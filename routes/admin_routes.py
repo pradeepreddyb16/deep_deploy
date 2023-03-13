@@ -1301,77 +1301,34 @@ def addemployee():
     return jsonify({'status':True, 'msg':'sub cct deactivated'})
 
 
-
-############### THIRUMALA ###############
-
-
-@api.route('/sai_select',methods=['POST','GET'])
-def sai_select():
-    
-    data = db.thiruselect()
-    print(type(data))
-    return jsonify ({'status':True,'data':data})
+############## SHOW DOCTOR NURSE AND COMPOUNDER ################
 
 
-@api.route('/sai_single_select',methods=['POST','GET'])
-def sai_single_select():
-   
-    id = request.form['id']
+#DOCTORS
+@api.route('/select_doctor',methods = ['GET','POST'])
+def selectdoctor():
 
-    data = db.thirusingleselect(id)
-    print(data)
+    clientid = request.form['clientid']
 
-    return jsonify ({'status':True,'data':data})
-
-
-@api.route('/sai_update',methods = ['POST','GET'])
-def sai_update():
-    
-    name = request.form['name']
-    email = request.form['email']
-    
-    id = request.form['id']
-
-    db.thiruupdate(name,email,id)
-    
-    return jsonify ({'status':True,'msg':'updated successfully'})
+    data = db.selectalldoctors(clientid)
+    return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
 
 
-@api.route('/sai_delete',methods=['POST','GET'])
-def sai_delete():
+#NURSE
+@api.route('/select_nurse',methods = ['GET','POST'])
+def selectnurse():
 
-    id = request.form['id']
-    
-    db.thirudelete(id)
+    clientid = request.form['clientid']
 
-    return jsonify ({'status':True,'msg':'record deleted'})
-
-
-@api.route('/sai_insert',methods = ['POST','GET'])
-def saiinsert():
-    
-    name = request.form['name']
-    email = request.form['email']
-    # mobile = request.form['mobile']
-    password = request.form['password']
-    con_password = request.form['con_password']
-     
-
-    db.demoinsert(name,email,password,con_password)
-    return jsonify({'status': True, 'msg': 'data inserted'})
+    data = db.selectallnurse(clientid)
+    return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
 
 
-@api.route('/sai_login',methods = ['POST','GET'])
-def sailogin():
+#COMPOUNDER
+@api.route('/select_compounder',methods = ['GET','POST'])
+def selectcompounder():
 
-    uname = request.form['email']
-    password = request.form['password']
+    clientid = request.form['clientid']
 
-    data = db.loginselect(uname,password)
-    print(data)
-
-    if data :
-        if data['email'] == uname and data['password'] == password:
-            return jsonify({'status':True,'msg':'login success'})
-    else:
-        return jsonify({'status':False,'msg':'login failed'})
+    data = db.selectallcompounders(clientid)
+    return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
