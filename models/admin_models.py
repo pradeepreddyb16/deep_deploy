@@ -26,7 +26,7 @@ class Models:
 
         # sql="SELECT `admin_id`,`admin_name`,`cat_id`,`admin_pass`,`user_mail`,`user_mobile`,`login_attempts`, date_format(`login_date`,'%%Y-%%m-%%d') as login_date,`otp_attempts`,date_format(`otp_date`,'%%Y-%%m-%%d') as`otp_date` , `admin_role`,`token`  FROM `user_table`  WHERE ( `user_mail` = %s or `user_mobile`=%s ) and admin_pass=%s and cat_id = %s and `admin_status`=1"
 
-        sql = "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, `user_reg_date`, `login_attempts`, `login_date`, `user_status`, `electrodes_count`, `device_count`, `device_name`, `token` FROM `client` WHERE `user_mail` = %s and user_pass=%s and user_cat_id = %s and `user_status`=1"
+        sql = "SELECT `client_id`, `ca_id`,`cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, `user_reg_date`, `login_attempts`, `login_date`, `user_status`, `electrodes_count`, `device_count`, `device_name`, `token` FROM `client` WHERE `user_mail` = %s and user_pass=%s and user_cat_id = %s and `user_status`=1"
 
         cur.execute(sql,[uname,passs,cat_id])
         print(sql)
@@ -260,7 +260,17 @@ class Models:
         mysql.connection.commit()
         cur.close()
 
+
+    # UPDATE CA_ID
+    def updatecaid(caid,clientid):
+        cur = mysql.connection.cursor()
+        sql = "UPDATE `client` SET `ca_id`= %s WHERE `client_id`= %s"
+
+        cur.execute(sql,[caid,clientid])
+        mysql.connection.commit()
+        cur.close()
     
+
     # CHECK MOBILE NUMBER,EMAIL
     def checkMobileandEmail(umail,umobile):
         cur=mysql.connection.cursor()
@@ -371,7 +381,7 @@ class Models:
     def selectnewclient(cstid):
         cur = mysql.connection.cursor()
 
-        sql = "SELECT  `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`,`user_name`, `user_mobile`, `user_mail`, `user_pass`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date FROM `client` WHERE `cst_id`=%s and `user_status`= 1 "
+        sql = "SELECT  `client_id`, `ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`,`user_name`, `user_mobile`, `user_mail`, `user_pass`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date FROM `client` WHERE `cst_id`=%s and `user_status`= 1 "
 
         cur.execute(sql,[cstid])
         data = cur.fetchall()
@@ -447,10 +457,7 @@ class Models:
         return data
 
 
-   
-
-
-############### GET LAST ID ###############
+   ############### GET LAST ID ###############
 
 
     # LAST ID
@@ -755,9 +762,9 @@ class Models:
        
         placeholders = ",".join(["%s"] * len(cst_team))
 
-        sql = f"SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE  `cst_id` IN ({placeholders}) "
+        sql = f"SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE  `cst_id` IN ({placeholders}) "
 
-        sql1 = "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%d-%m-%Y') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `user_status`= 1"
+        sql1 = "SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%d-%m-%Y') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `user_status`= 1"
 
        
 
@@ -860,7 +867,7 @@ class Models:
     def selectclientwrtsuperadmin(ucatid):
         cur=mysql.connection.cursor()
         
-        sql= "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `user_cat_id`=%s and `user_status`= 1"
+        sql= "SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `user_cat_id`=%s and `user_status`= 1"
 
         cur.execute(sql,[ucatid])
         data = cur.fetchall()
@@ -1035,7 +1042,7 @@ class Models:
     def selectfinancetaggedclient(financeid):
         cur=mysql.connection.cursor()
         
-        sql= "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `finance_id` = %s and `user_status` = 1"
+        sql= "SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `finance_id` = %s and `user_status` = 1"
 
         cur.execute(sql,[financeid])
         data = cur.fetchall()
@@ -1049,7 +1056,7 @@ class Models:
     def selectmanagementtaggedclient(managementid):
         cur=mysql.connection.cursor()
         
-        sql= "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `management_id` = %s and `user_status` = 1"
+        sql= "SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `management_id` = %s and `user_status` = 1"
 
         cur.execute(sql,[managementid])
         data = cur.fetchall()
@@ -1063,7 +1070,7 @@ class Models:
     def selectcctaggedclient(managementid):
         cur=mysql.connection.cursor()
         
-        sql= "SELECT `client_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `cct_id` = %s and `user_status` = 1"
+        sql= "SELECT `client_id`,`ca_id`, `cst_id`, `cct_id`, `cct_name`, `management_id`, `management_name`, `finance_id`, `finance_name`, `user_cat_id`, `user_cat`, `user_name`, `user_mobile`, `user_mail`, `user_pass`, `user_otp`, `otp_attempts`, `otp_date`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date, `login_attempts`, `login_date`, `user_status`, `token` FROM `client` WHERE `cct_id` = %s and `user_status` = 1"
 
         cur.execute(sql,[managementid])
         data = cur.fetchall()
@@ -1281,9 +1288,9 @@ class Models:
 
 
 # DOCTOR
-    def selectalldoctors(clientid):
+    def selectclinicdetails(clientid):
         cur=mysql.connection.cursor()
-        sql = "SELECT  `doctor` FROM `client` WHERE `client_id` = %s"
+        sql = "SELECT  `doctor`,`nurse`,`compounder`, date_format(`user_reg_date`,'%%Y-%%m-%%d') as user_reg_date FROM `client` WHERE `client_id` = %s"
         cur.execute(sql,[clientid])
         data = cur.fetchall()
         cur.close()

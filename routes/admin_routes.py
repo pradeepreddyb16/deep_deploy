@@ -195,7 +195,7 @@ def clientvalidateotp():
             
                 session['user_data']=data
                 
-                return jsonify({'status':True,'msg':'Login Successful','data':{ 'user_id': session['user_data']['client_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
+                return jsonify({'status':True,'msg':'Login Successful','data':{ 'user_id': session['user_data']['client_id'],'ca_id': session['user_data']['ca_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
         else:
             print("else check")
             data=db.getclientotpAttemptsWithUname(uname)
@@ -249,7 +249,7 @@ def getsession():
     # do something
  
         print(session['user_data'])
-        return jsonify({'status':True,'data':{ 'client_id': session['user_data']['client_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
+        return jsonify({'status':True,'data':{ 'client_id': session['user_data']['client_id'],'ca_id': session['user_data']['ca_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
 
     elif 'user_data' in session: 
         print(session['user_data'])
@@ -559,6 +559,21 @@ def addingclient():
             db.updateavaliabilityfalse(cctid,managementid,financeid)
             data12 = db.lastid()
         return jsonify({'status':True,'data':data12,'msg':'successfully Added'})
+
+
+# UPDATE CA_ID
+@api.route('/update_caid',methods = ['POST','GET'])
+def updatecaid():
+
+    caid = request.form['caid']
+    clientid = request.form['clientid']
+
+    if caid and clientid:
+        if caid != "" and clientid != "":
+            db.updatecaid(caid,clientid)
+        return jsonify({'status':True,'msg':'ca id updated'})
+    else:
+        return jsonify({'status':False,'msg':'please check the data'})
 
 
 # UPDATE CST AVALIABILITY FASLE IN USERTABLE TABLE
@@ -1305,12 +1320,12 @@ def addemployee():
 
 
 #DOCTORS
-@api.route('/select_doctor',methods = ['GET','POST'])
+@api.route('/select_clinic_details',methods = ['GET','POST'])
 def selectdoctor():
 
     clientid = request.form['clientid']
 
-    data = db.selectalldoctors(clientid)
+    data = db.selectclinicdetails(clientid)
     return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
 
 
@@ -1320,7 +1335,7 @@ def selectnurse():
 
     clientid = request.form['clientid']
 
-    data = db.selectallnurse(clientid)
+    data = db.selectclinicdetails(clientid)
     return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
 
 
