@@ -1326,6 +1326,7 @@ def selectdoctor():
     clientid = request.form['clientid']
 
     data = db.selectclinicdetails(clientid)
+    print(data)
     return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
 
 
