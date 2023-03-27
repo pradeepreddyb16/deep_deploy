@@ -1,4 +1,4 @@
-from flask import Flask,session,request,jsonify,Blueprint
+from flask import Flask,session,request,jsonify,Blueprint,render_template
 import hashlib
 from flask_mysqldb import MySQL
 import random
@@ -46,6 +46,8 @@ def onetimepassword():
 
 
 ############### ADMIN LOGIN ###############
+
+
 
 
 # ROUTE FOR LOGIN
@@ -249,7 +251,7 @@ def getsession():
     # do something
  
         print(session['user_data'])
-        return jsonify({'status':True,'data':{ 'client_id': session['user_data']['client_id'],'ca_id': session['user_data']['ca_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
+        return jsonify({'status':True,'data':{ 'user_id': session['user_data']['client_id'],'ca_id': session['user_data']['ca_id'],'user_cat_id': session['user_data']['user_cat_id'], 'user_name': session['user_data']['user_name'], 'user_mail': session['user_data']['user_mail'],'user_cat': session['user_data']['user_cat'],'token': session['user_data']['token']}})
 
     elif 'user_data' in session: 
         print(session['user_data'])
@@ -890,8 +892,10 @@ def selectadmindatawrtsuperadmins():
 def selectcctmfwrtsuperadmin():
 
     ucatid = request.form['ucatid']
+    print(request.form)
 
     data = db.selectcctmfwrtsuperadmin(ucatid)
+    print(data)
     return jsonify({'status':True,'data': data,'msg':'data fetched successfully'})
 
 
@@ -1327,7 +1331,7 @@ def selectdoctor():
 
     data = db.selectclinicdetails(clientid)
     print(data)
-    return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
+    return jsonify({'status':True,'data':data,'msg':'client details fetched'})
 
 
 #NURSE
@@ -1348,3 +1352,5 @@ def selectcompounder():
 
     data = db.selectallcompounders(clientid)
     return jsonify({'status':True,'data':data,'msg':'sub cct deactivated'})
+
+

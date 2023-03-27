@@ -33,6 +33,13 @@ def after_request(response):
    response.headers["Pragma"] = "no-cache"
    return response
 
+@app.after_request
+def after_request(response):
+   response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+   response.headers["Expires"] = 0
+   response.headers["Pragma"] = "no-cache"
+   return response
+
 @app.route('/', methods=['POST','GET'])
 def home():
     # cur=mysql.connection.cursor()
@@ -44,6 +51,11 @@ def home():
     # print(data)
     # return "hello"
     return render_template("index.html")
+
+@app.errorhandler(404) 
+def not_found(e): 
+  return render_template("index.html")
+
 
 # @app.errorhandler(404)
 # def notfounf():
@@ -57,7 +69,7 @@ app.register_blueprint(api)
 
 if __name__ == '__main__':
     # appp=create_app(application)
-    app.run(debug = True,host="0.0.0.0",port=5001)
+    app.run(debug = True,host="0.0.0.0",port=5005)
     
 
     
