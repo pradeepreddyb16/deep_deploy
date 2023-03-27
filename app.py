@@ -18,9 +18,9 @@ app.secret_key='sdjasdnjasdnasjdnasdjiqwjeuqwehjasndasd'
 
 
 
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_HOST'] = 'admin-dashboard-mysql.csqf6tjfsypd.ap-south-1.rds.amazonaws.com'
+app.config['MYSQL_USER'] = 'admin'
+app.config['MYSQL_PASSWORD'] = 'Admin9848'
 app.config['MYSQL_DB'] = 'deepfacts'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
      
@@ -69,7 +69,7 @@ app.register_blueprint(api)
 
 if __name__ == '__main__':
     # appp=create_app(application)
-    app.run(debug = True,host="0.0.0.0",port=5005)
+    app.run(debug = True,host="0.0.0.0",port=5000)
     
 
     
